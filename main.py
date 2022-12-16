@@ -1,6 +1,6 @@
 from collections import Counter
 from bitarray import bitarray
-import heapq, os, pickle, math
+import heapq, os, pickle, math, time
 
 class Node:
     """Árvore de Huffman
@@ -98,6 +98,7 @@ def getwordfreq(filename):
     return wordict
 
 def compress(filename):
+    start = time.time()
     """Comprime um arquivo utilizando codificação por caractere
 
     Args:
@@ -122,8 +123,14 @@ def compress(filename):
     with open(newfilename, 'ab') as file: file.write(a)
     print('Arquivo comprimido com sucesso')
     newfilesize = os.stat(newfilename).st_size
+    rate = (oldsize - newfilesize) / oldsize * 100
     print(f'Tamanho do arquivo     : {oldsize} bytes')
     print(f'Tamanho após compressão: {newfilesize} bytes')
+    print('Taxa de compressão: %.2f' % rate, end = "")
+    print('%')
+    end = time.time()
+    totaltime = end - start
+    print('Tempo de execução do algoritmo: %.2f' % totaltime + ' segundos')
 
 def getbytes(number):
     """Calcula o número de bytes necessários para guardar uma quantidade de bits
@@ -137,6 +144,7 @@ def getbytes(number):
     return math.ceil(number / 8)
 
 def decompress(filename, opt):
+    start = time.time()
     """Descomprime um arquivo
 
     Args:
@@ -165,9 +173,13 @@ def decompress(filename, opt):
         for x in loadedcodes: heapq.heappush(nodes, Node(loadedcodes[x], x))
         nodes = maketree(nodes) 
         text = decodestr(encoded, nodes[0])
-    originalname = filename[:len(filename) - 3] + 'txt'
+    originalname = filename[:len(filename) - 3]
+    originalname = originalname + 'txt'
     with open(originalname, 'w') as f: f.write(text)
     print('Arquivo descomprimido com sucesso')
+    end = time.time()
+    totaltime = end - start
+    print('Tempo de execução do algoritmo: %.2f' % totaltime + ' segundos')
 
 def showMenu():
     """Mostra o menu da aplicação
@@ -239,6 +251,7 @@ def decodestr(encoded, tree):
     return string 
 
 def compressw(filename):
+    start = time.time()
     """Comprime um arquivo utilizando codificação por palavras
 
     Args:
@@ -262,13 +275,19 @@ def compressw(filename):
     with open(newfilename, 'ab') as file: file.write(bitarray(encoded))
     print('Arquivo comprimido com sucesso')
     newfilesize = os.stat(newfilename).st_size
+    rate = (oldsize - newfilesize) / oldsize * 100
     print(f'Tamanho do arquivo     : {oldsize} bytes')
     print(f'Tamanho após compressão: {newfilesize} bytes')
+    print('Taxa de compressão: %.2f' % rate, end = "")
+    print('%')
+    end = time.time()
+    totaltime = end - start
+    print('Tempo de execução do algoritmo: %.2f' % totaltime + ' segundos')
 
 def main():
     """Função principal
     """
-    print('[Algoritmo compressor de Huffman]\n')
+    print('[Algoritmo de Huffman]')
     opt = showMenu()
     while opt != 5:
         filename = input(' Insira o nome do arquivo: ')
