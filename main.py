@@ -290,7 +290,7 @@ def main():
     print('[Algoritmo de Huffman]')
     opt = showMenu()
     while opt != 5:
-        filename = input(' Insira o nome do arquivo: ')
+        filename = input('Insira o nome do arquivo: ')
         if opt == 1: compress(filename)
         if opt == 2: decompress(filename, 1)
         if opt == 3: compressw(filename)
